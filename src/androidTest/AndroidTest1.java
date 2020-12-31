@@ -1,27 +1,29 @@
 package androidTest;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteWebDriver;
 
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.remote.MobileCapabilityType;
 
-public class AndroidTest1 {
-public static void main(String[] args) throws InterruptedException, IOException {
-	Process p=null;
+public class AndroidTest1 {	
+
+	
+	
+	    
+public static void main(String[] args) throws Exception {
+	
 	  try
       { 
-		  p =Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"emulator -avd Emulator\""); 
+		Runtime.getRuntime().exec("cmd /c start cmd.exe /K \"emulator -avd Emulator\""); 
       } 
       catch (Exception e) 
       { 
@@ -30,13 +32,13 @@ public static void main(String[] args) throws InterruptedException, IOException 
       } 
 	    
 	
-	WebDriver driver;;
+	  AndroidDriver<AndroidElement>  driver;
 	DesiredCapabilities capabilities = new DesiredCapabilities();
 	capabilities.setCapability("BROWSER_NAME", "Android");
-	capabilities.setCapability("VERSION", "4.4.2"); 
+	capabilities.setCapability("VERSION", "5.0.4"); 
 	capabilities.setCapability("deviceName","Emulator");
 	capabilities.setCapability("platformName","Android");
-	capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "UiAutomator2");
+	capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "UiAutomator1");
  
    
    capabilities.setCapability("appPackage", "com.vinmurari.AwesomeProject");
@@ -44,16 +46,22 @@ public static void main(String[] args) throws InterruptedException, IOException 
 	capabilities.setCapability("appActivity","com.vinmurari.AwesomeProject.MainActivity"); // This is Launcher activity of your app (you can get it from apk info app)
 //Create RemoteWebDriver instance and connect to the Appium server
  //It will launch the Calculator App in Android Device using the configurations specified in Desired Capabilities
-   driver = new RemoteWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+   driver = new AndroidDriver<>(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
    //locate the Text on the calculator by using By.name()
    Thread.sleep(10000);
-   List<WebElement> elements = driver.findElements(By.xpath("//android.widget.EditText"));
+   List<AndroidElement> elements = driver.findElements(By.xpath("//android.widget.EditText"));
    
    elements.get(0).sendKeys("Online_User");
    elements.get(1).sendKeys("Online_User");
   
+   driver.navigate().back();
+   
    WebElement signin=driver.findElement(By.xpath("//android.widget.TextView[@text='SIGN IN']"));
    signin.click();
+
+ driver.findElementByAndroidUIAutomator(
+         "new UiScrollable(new UiSelector()).scrollIntoView(new UiSelector().text(\"Fresh Orange\"));");
+ driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().textContains(\"Apple\").instance(0))"); 
 
    driver.quit();
    
